@@ -1,0 +1,17 @@
+{
+  "name": "XAU Journal",
+  "short_name": "XAU Journal",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0b1120",
+  "theme_color": "#111827",
+  "description": "Trading journal khusus XAUUSD",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
