@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>XAU Journal</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1120;color:#fff;font-family:Arial,sans-serif}
+header{background:#111827;padding:18px;position:sticky;top:0}
+main{max-width:700px;margin:auto;padding:14px}
+.card{background:#111827;border:1px solid #263244;border-radius:14px;padding:15px;margin-bottom:14px}
+h1,h2{margin-top:0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+label{font-size:12px;color:#94a3b8}
+input,select,textarea{width:100%;padding:10px;margin-top:4px;background:#0b1120;color:white;border:1px solid #334155;border-radius:8px}
+button{width:100%;padding:12px;border:0;border-radius:9px;background:#2563eb;color:white;font-weight:bold;margin-top:10px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat{background:#0b1120;padding:12px;border-radius:9px}
+.stat b{display:block;font-size:20px;margin-top:5px}
+.good{color:#4ade80}.bad{color:#f87171}.yellow{color:#facc15}
+.trade{border-top:1px solid #334155;padding:12px 0}
+.small{font-size:12px;color:#94a3b8}
+.full{grid-column:1/-1}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🥇 XAU Journal</h1>
+<div class="small">XAUUSD • Cent Account</div>
+</header>
+
+<main>
+
+<div class="card">
+<h2>📊 Dashboard</h2>
+<div class="stats">
+<div class="stat">Trades<b id="total">0</b></div>
+<div class="stat">Win Rate<b id="winrate">0%</b></div>
+<div class="stat">Net P/L<b id="pnl">0 USC</b></div>
+<div class="stat">Avg RR<b id="rr">0</b></div>
+<div class="stat">Sesuai Plan<b id="plan">0%</b></div>
+<div class="stat">Profit Factor<b id="pf">0</b></div>
+</div>
+</div>
+
+<div class="card">
+<h2>➕ Tambah Trade</h2>
+
+<div class="grid">
+
+<div>
+<label>Tanggal</label>
+<input id="date" type="date">
+</div>
+
+<div>
+<label>Balance saat entry (USC)</label>
+<input id="balance" type="number" placeholder="10000">
+</div>
+
+<div>
+<label>Direction</label>
+<select id="side">
+<option>BUY</option>
+<option>SELL</option>
+</select>
+</div>
+
+<div>
+<label>Lot</label>
+<input id="lot" type="number" step="0.01" value="0.01">
+</div>
+
+<div>
+<label>Entry</label>
+<input id="entry" type="number" step="0.01">
+</div>
+
+<div>
+<label>Stop Loss</label>
+<input id="sl" type="number" step="0.01">
+</div>
+
+<div>
+<label>Take Profit</label>
+<input id="tp" type="number" step="0.01">
+</div>
+
+<div>
+<label>Exit</label>
+<input id="exit" type="number" step="0.01">
+</div>
+
+<div>
+<label>Session</label>
+<select id="session">
+<option>New York</option>
+<option>London</option>
+<option>Asia</option>
+</select>
+</div>
+
+<div>
+<label>Hasil</label>
+<select id="result">
+<option>WIN</option>
+<option>LOSS</option>
+<option>BE</option>
+</select>
+</div>
+
+<div>
+<label>POI valid?</label>
+<select id="poi">
+<option>YES</option>
+<option>NO</option>
+</select>
+</div>
+
+<div>
+<label>MSS/BOS?</label>
+<select id="mss">
+<option>YES</option>
+<option>NO</option>
+</select>
+</div>
+
+<div>
+<label>FOMO?</label>
+<select id="fomo">
+<option>NO</option>
+<option>YES</option>
+</select>
+</div>
+
+<div>
+<label>Revenge Trade?</label>
+<select id="revenge">
+<option>NO</option>
+<option>YES</option>
+</select>
+</div>
+
+<div class="full">
+<label>Catatan</label>
+<textarea id="note" placeholder="Alasan entry, kondisi psikologi, evaluasi..."></textarea>
+</div>
+
+</div>
+
+<div class="card">
+<b>⚡ Hasil Otomatis</b>
+<div id="calc" class="small">Masukkan Entry, SL dan TP.</div>
+</div>
+
+<button onclick="saveTrade()">💾 SIMPAN TRADE</button>
+</div>
+
+<div class="card">
+<h2>📋 Riwayat</h2>
+<div id="history"></div>
+</div>
+
+<div class="card">
+<h2>🧠 Evaluasi</h2>
+<div id="evaluation" class="small">Belum ada trade.</div>
+</div>
+
+<div class="card">
+<button onclick="backup()">⬇️ Backup Data</button>
+<button onclick="clearData()" style="background:#dc2626">🗑️ Hapus Semua Data</button>
+</div>
+
+</main>
+
+<script>
+
+let trades=JSON.parse(localStorage.getItem("xauTrades")||"[]");
+
+const $=id=>document.getElementById(id);
+
+$("date").value=new Date().toISOString().slice(0,10);
+
+function calculate(){
+
+let side=$("side").value;
+let lot=+$("lot").value;
+let entry=+$("entry").value;
+let sl=+$("sl").value;
+let tp=+$("tp").value;
+let balance=+$("balance").value;
+
+if(!entry||!sl||!tp||!lot||!balance){
+$("calc").innerHTML="Masukkan data Entry, SL, TP, Lot dan Balance.";
+return;
+}
+
+let riskMove=Math.abs(entry-sl);
+let rewardMove=Math.abs(tp-entry);
+let rr=rewardMove/riskMove;
+
+let riskUSD=riskMove*lot*100;
+let riskUSC=riskUSD*100;
+let riskPct=(riskUSC/balance)*100;
+
+$("calc").innerHTML=
+"Risk: <b>"+riskUSC.toFixed(0)+" USC</b><br>"+
+"Risk: <b>"+riskPct.toFixed(2)+"%</b><br>"+
+"RR: <b>1:"+rr.toFixed(2)+"</b>";
+
+}
+
+["side","lot","entry","sl","tp","balance"].forEach(x=>{
+$(x).addEventListener("input",calculate);
+$(x).addEventListener("change",calculate);
+});
+
+function saveTrade(){
+
+let side=$("side").value;
+let lot=+$("lot").value;
+let entry=+$("entry").value;
+let sl=+$("sl").value;
+let tp=+$("tp").value;
+let exit=+$("exit").value;
+let balance=+$("balance").value;
+
+if(!lot||!entry||!sl||!tp||!exit||!balance){
+alert("Lengkapi Balance, Lot, Entry, SL, TP dan Exit.");
+return;
+}
+
+let riskMove=Math.abs(entry-sl);
+let rewardMove=Math.abs(tp-entry);
+let rr=rewardMove/riskMove;
+
+let riskUSC=riskMove*lot*10000;
+let riskPct=(riskUSC/balance)*100;
+
+let pnlUSD;
+
+if(side==="BUY")
+pnlUSD=(exit-entry)*lot*100;
+else
+pnlUSD=(entry-exit)*lot*100;
+
+let pnlUSC=pnlUSD*100;
+
+let violations=[];
+
+if(riskPct>2)
+violations.push("Risk > 2%");
+
+if(rr<2)
+violations.push("RR < 1:2");
+
+if($("poi").value==="NO")
+violations.push("Tidak ada POI");
+
+if($("mss").value==="NO")
+violations.push("Tidak ada MSS/BOS");
+
+if($("fomo").value==="YES")
+violations.push("FOMO");
+
+if($("revenge").value==="YES")
+violations.push("Revenge Trade");
+
+let trade={
+date:$("date").value,
+side,
+lot,
+entry,
+sl,
+tp,
+exit,
+balance,
+rr,
+riskUSC,
+riskPct,
+pnlUSC,
+result:$("result").value,
+session:$("session").value,
+poi:$("poi").value,
+mss:$("mss").value,
+fomo:$("fomo").value,
+revenge:$("revenge").value,
+violations,
+note:$("note").value
+};
+
+trades.push(trade);
+
+localStorage.setItem("xauTrades",JSON.stringify(trades));
+
+render();
+
+alert(
