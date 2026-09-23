@@ -4,952 +4,233 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#111827">
-<title>XAU Journal</title>
-
+<title>XAU Journal V3</title>
 <style>
 *{box-sizing:border-box}
-
-body{
-  margin:0;
-  background:#0b1120;
-  color:#fff;
-  font-family:Arial,sans-serif;
-}
-
-header{
-  background:#111827;
-  padding:18px;
-  position:sticky;
-  top:0;
-  z-index:10;
-}
-
-main{
-  max-width:700px;
-  margin:auto;
-  padding:14px;
-}
-
-.card{
-  background:#111827;
-  border:1px solid #263244;
-  border-radius:14px;
-  padding:15px;
-  margin-bottom:14px;
-}
-
-h1,h2{margin-top:0}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-}
-
-label{
-  font-size:12px;
-  color:#94a3b8;
-}
-
-input,select,textarea{
-  width:100%;
-  padding:10px;
-  margin-top:4px;
-  background:#0b1120;
-  color:white;
-  border:1px solid #334155;
-  border-radius:8px;
-}
-
-textarea{
-  min-height:80px;
-  resize:vertical;
-}
-
-button{
-  width:100%;
-  padding:13px;
-  border:0;
-  border-radius:9px;
-  background:#2563eb;
-  color:white;
-  font-weight:bold;
-  margin-top:10px;
-  font-size:15px;
-}
-
-button:active{
-  transform:scale(.98);
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-
-.stat{
-  background:#0b1120;
-  padding:12px;
-  border-radius:9px;
-}
-
-.stat b{
-  display:block;
-  font-size:20px;
-  margin-top:5px;
-}
-
-.good{color:#4ade80}
-.bad{color:#f87171}
-.yellow{color:#facc15}
-
-.trade{
-  border-top:1px solid #334155;
-  padding:12px 0;
-}
-
-.small{
-  font-size:12px;
-  color:#94a3b8;
-}
-
-.full{
-  grid-column:1/-1;
-}
-
-.notice{
-  background:#172033;
-  padding:10px;
-  border-radius:8px;
-  margin-top:10px;
-  font-size:12px;
-  color:#cbd5e1;
-}
+body{margin:0;background:#0b1120;color:#fff;font-family:Arial,sans-serif}
+header{background:#111827;padding:18px;position:sticky;top:0;z-index:10}
+main{max-width:700px;margin:auto;padding:14px}
+.card{background:#111827;border:1px solid #263244;border-radius:14px;padding:15px;margin-bottom:14px}
+h1,h2{margin-top:0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+label{font-size:12px;color:#94a3b8}
+input,select,textarea{width:100%;padding:10px;margin-top:4px;background:#0b1120;color:white;border:1px solid #334155;border-radius:8px}
+textarea{min-height:80px;resize:vertical}
+button{width:100%;padding:13px;border:0;border-radius:9px;background:#2563eb;color:white;font-weight:bold;margin-top:10px;font-size:15px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat{background:#0b1120;padding:12px;border-radius:9px}
+.stat b{display:block;font-size:20px;margin-top:5px}.good{color:#4ade80}.bad{color:#f87171}.yellow{color:#facc15}
+.trade{border-top:1px solid #334155;padding:12px 0}.small{font-size:12px;color:#94a3b8}.full{grid-column:1/-1}
+.notice{background:#172033;padding:10px;border-radius:8px;margin-top:10px;font-size:12px;color:#cbd5e1}
+.recommend{background:#172033;border:1px solid #334155;padding:12px;border-radius:9px;margin-top:10px}
 </style>
 </head>
-
 <body>
-
-<header>
-<h1>🥇 XAU Journal</h1>
-<div class="small">XAUUSD • Cent Account</div>
-</header>
-
+<header><h1>🥇 XAU Journal</h1><div class="small">XAUUSD • Cent Account • V3</div></header>
 <main>
-
 <div class="card">
 <h2>📊 Dashboard</h2>
-
 <div class="stats">
-
-<div class="stat">
-Trades
-<b id="total">0</b>
-</div>
-
-<div class="stat">
-Win Rate
-<b id="winrate">0%</b>
-</div>
-
-<div class="stat">
-Net P/L
-<b id="pnl">0 USC</b>
-</div>
-
-<div class="stat">
-Avg RR
-<b id="rr">0</b>
-</div>
-
-<div class="stat">
-Sesuai Plan
-<b id="plan">0%</b>
-</div>
-
-<div class="stat">
-Profit Factor
-<b id="pf">0</b>
-</div>
-
+<div class="stat">Trades<b id="total">0</b></div>
+<div class="stat">Win Rate<b id="winrate">0%</b></div>
+<div class="stat">Net P/L<b id="pnl">0 USC</b></div>
+<div class="stat">Avg RR<b id="rr">0</b></div>
+<div class="stat">Sesuai Plan<b id="plan">0%</b></div>
+<div class="stat">Profit Factor<b id="pf">0</b></div>
 </div>
 </div>
-
 
 <div class="card">
-
 <h2>➕ Tambah Trade</h2>
-
 <div class="grid">
+<div><label>Tanggal</label><input id="date" type="date"></div>
+<div><label>Balance saat entry (USC)</label><input id="balance" type="number" step="0.01" placeholder="711"></div>
 
-<div>
-<label>Tanggal</label>
-<input id="date" type="date">
+<div><label>Target Risk %</label><input id="targetRisk" type="number" step="0.1" value="1"></div>
+<div><label>Lot</label><input id="lot" type="number" step="0.01" value="0.01"></div>
+
+<div><label>Direction</label><select id="side"><option value="BUY">BUY</option><option value="SELL">SELL</option></select></div>
+<div><label>Entry</label><input id="entry" type="number" step="0.01"></div>
+<div><label>Stop Loss</label><input id="sl" type="number" step="0.01"></div>
+<div><label>Take Profit</label><input id="tp" type="number" step="0.01"></div>
+<div><label>Exit</label><input id="exit" type="number" step="0.01"></div>
+<div><label>Session</label><select id="session"><option>New York</option><option>London</option><option>Asia</option></select></div>
+<div><label>Hasil</label><select id="result"><option>WIN</option><option>LOSS</option><option>BE</option></select></div>
+<div><label>POI valid?</label><select id="poi"><option>YES</option><option>NO</option></select></div>
+<div><label>MSS/BOS?</label><select id="mss"><option>YES</option><option>NO</option></select></div>
+<div><label>FOMO?</label><select id="fomo"><option>NO</option><option>YES</option></select></div>
+<div><label>Revenge Trade?</label><select id="revenge"><option>NO</option><option>YES</option></select></div>
+<div class="full"><label>Catatan</label><textarea id="note" placeholder="Alasan entry, kondisi psikologi, evaluasi..."></textarea></div>
 </div>
-
-<div>
-<label>Balance saat entry (USC)</label>
-<input id="balance" type="number" placeholder="10000">
-</div>
-
-<div>
-<label>Direction</label>
-<select id="side">
-<option value="BUY">BUY</option>
-<option value="SELL">SELL</option>
-</select>
-</div>
-
-<div>
-<label>Lot</label>
-<input id="lot" type="number" step="0.01" value="0.01">
-</div>
-
-<div>
-<label>Entry</label>
-<input id="entry" type="number" step="0.01">
-</div>
-
-<div>
-<label>Stop Loss</label>
-<input id="sl" type="number" step="0.01">
-</div>
-
-<div>
-<label>Take Profit</label>
-<input id="tp" type="number" step="0.01">
-</div>
-
-<div>
-<label>Exit</label>
-<input id="exit" type="number" step="0.01">
-</div>
-
-<div>
-<label>Session</label>
-<select id="session">
-<option>New York</option>
-<option>London</option>
-<option>Asia</option>
-</select>
-</div>
-
-<div>
-<label>Hasil</label>
-<select id="result">
-<option>WIN</option>
-<option>LOSS</option>
-<option>BE</option>
-</select>
-</div>
-
-<div>
-<label>POI valid?</label>
-<select id="poi">
-<option>YES</option>
-<option>NO</option>
-</select>
-</div>
-
-<div>
-<label>MSS/BOS?</label>
-<select id="mss">
-<option>YES</option>
-<option>NO</option>
-</select>
-</div>
-
-<div>
-<label>FOMO?</label>
-<select id="fomo">
-<option>NO</option>
-<option>YES</option>
-</select>
-</div>
-
-<div>
-<label>Revenge Trade?</label>
-<select id="revenge">
-<option>NO</option>
-<option>YES</option>
-</select>
-</div>
-
-<div class="full">
-<label>Catatan</label>
-<textarea id="note" placeholder="Alasan entry, kondisi psikologi, evaluasi..."></textarea>
-</div>
-
-</div>
-
 
 <div class="card">
-
 <b>⚡ Perhitungan Otomatis</b>
-
-<div id="calc" class="small">
-Masukkan Balance, Lot, Entry, SL dan TP.
+<div id="calc" class="small">Masukkan Balance, Entry dan SL.</div>
+<div id="recommend" class="recommend small">Rekomendasi lot akan muncul di sini.</div>
 </div>
 
-</div>
-
-
-<button id="saveButton" type="button">
-💾 SIMPAN TRADE
-</button>
-
+<button id="saveButton" type="button">💾 SIMPAN TRADE</button>
 <div class="notice">
-Risk dan RR dihitung otomatis. Pastikan spesifikasi contract size broker Cent kamu sesuai sebelum menjadikan hasil P/L sebagai acuan utama.
+Untuk XAU pada akun Cent yang diuji dari MT5 kamu: P/L aktual 0.05 lot dengan pergerakan 4.13 = 20.65 USC. Kalkulator V3 memakai faktor tersebut sebagai dasar. Jika spesifikasi broker berubah, angka perlu disesuaikan.
+</div>
 </div>
 
-</div>
-
-
+<div class="card"><h2>📋 Riwayat Trade</h2><div id="history"><div class="small">Belum ada trade.</div></div></div>
+<div class="card"><h2>🧠 Evaluasi</h2><div id="evaluation" class="small">Belum ada data untuk dievaluasi.</div></div>
 <div class="card">
-
-<h2>📋 Riwayat Trade</h2>
-
-<div id="history">
-<div class="small">Belum ada trade.</div>
+<button id="backupButton" type="button">⬇️ Backup Data</button>
+<button id="clearButton" type="button" style="background:#dc2626">🗑️ Hapus Semua Data</button>
 </div>
-
-</div>
-
-
-<div class="card">
-
-<h2>🧠 Evaluasi</h2>
-
-<div id="evaluation" class="small">
-Belum ada data untuk dievaluasi.
-</div>
-
-</div>
-
-
-<div class="card">
-
-<button id="backupButton" type="button">
-⬇️ Backup Data
-</button>
-
-<button id="clearButton" type="button" style="background:#dc2626">
-🗑️ Hapus Semua Data
-</button>
-
-</div>
-
 </main>
 
-
 <script>
-
 (function(){
-
 "use strict";
+const $=id=>document.getElementById(id);
+let trades=[];
+try{trades=JSON.parse(localStorage.getItem("xauTrades")||"[]");if(!Array.isArray(trades))trades=[]}catch(e){trades=[]}
+$("date").value=new Date().toISOString().slice(0,10);
 
+/* MT5 Cent calibration from user's real trade:
+   0.05 lot, 4.13 price distance => 20.65 USC
+   => 1 lot and 1.00 price move = 100 USC
+*/
+const USC_PER_LOT_PER_PRICE=100;
 
-const $ = function(id){
-  return document.getElementById(id);
-};
-
-
-let trades = [];
-
-try{
-  trades = JSON.parse(
-    localStorage.getItem("xauTrades") || "[]"
-  );
-
-  if(!Array.isArray(trades)){
-    trades=[];
-  }
-
-}catch(error){
-  trades=[];
+function getValues(){
+  return {
+    lot:Number($("lot").value),
+    entry:Number($("entry").value),
+    sl:Number($("sl").value),
+    tp:Number($("tp").value),
+    balance:Number($("balance").value),
+    target:Number($("targetRisk").value)
+  };
 }
-
-
-$("date").value =
-  new Date().toISOString().slice(0,10);
-
 
 function calculate(){
-
-  const lot = Number($("lot").value);
-  const entry = Number($("entry").value);
-  const sl = Number($("sl").value);
-  const tp = Number($("tp").value);
-  const balance = Number($("balance").value);
-
-  if(!lot || !entry || !sl || !tp || !balance){
-
-    $("calc").innerHTML =
-      "Masukkan Balance, Lot, Entry, SL dan TP.";
-
+  const v=getValues();
+  if(!v.lot||!v.entry||!v.sl||!v.tp||!v.balance){
+    $("calc").innerHTML="Masukkan Balance, Lot, Entry, SL dan TP.";
+    $("recommend").innerHTML="Rekomendasi lot akan muncul di sini.";
     return;
   }
-
-
-  const riskMove = Math.abs(entry-sl);
-  const rewardMove = Math.abs(tp-entry);
-
-
-  if(riskMove <= 0){
-
-    $("calc").innerHTML =
-      "⚠️ SL tidak boleh sama dengan Entry.";
-
+  const riskMove=Math.abs(v.entry-v.sl);
+  const rewardMove=Math.abs(v.tp-v.entry);
+  if(riskMove<=0){
+    $("calc").innerHTML="⚠️ SL tidak boleh sama dengan Entry.";
     return;
   }
+  const riskUSC=riskMove*v.lot*USC_PER_LOT_PER_PRICE;
+  const riskPct=riskUSC/v.balance*100;
+  const rr=rewardMove/riskMove;
 
+  const targetRisk=v.target>0?v.target:1;
+  const maxLotRaw=(v.balance*(targetRisk/100))/(riskMove*USC_PER_LOT_PER_PRICE);
+  const maxLot=Math.floor(maxLotRaw*100+1e-9)/100;
 
-  const rr = rewardMove/riskMove;
+  $("calc").innerHTML=
+    "Risk: <b>"+riskUSC.toFixed(2)+" USC</b><br>"+
+    "Risk: <b>"+riskPct.toFixed(2)+"%</b><br>"+
+    "RR: <b>1:"+rr.toFixed(2)+"</b>";
 
-  const riskUSC =
-    riskMove*lot*10000;
-
-  const riskPct =
-    riskUSC/balance*100;
-
-
-  $("calc").innerHTML =
-    "Risk: <b>"+
-    riskUSC.toFixed(0)+
-    " USC</b><br>"+
-    "Risk: <b>"+
-    riskPct.toFixed(2)+
-    "%</b><br>"+
-    "RR: <b>1:"+
-    rr.toFixed(2)+
-    "</b>";
+  $("recommend").innerHTML=
+    "🎯 Target risk <b>"+targetRisk.toFixed(2)+"%</b><br>"+
+    "Lot maksimal (step 0.01): <b>"+maxLot.toFixed(2)+"</b><br>"+
+    "<span class='small'>Lot teoritis: "+maxLotRaw.toFixed(3)+"</span>";
 }
 
-
-[
-  "balance",
-  "lot",
-  "entry",
-  "sl",
-  "tp"
-].forEach(function(id){
-
-  $(id).addEventListener(
-    "input",
-    calculate
-  );
-
-});
-
+["balance","targetRisk","lot","entry","sl","tp"].forEach(id=>$(id).addEventListener("input",calculate));
 
 function saveTrade(){
+  const side=$("side").value;
+  const lot=Number($("lot").value),entry=Number($("entry").value),sl=Number($("sl").value),
+        tp=Number($("tp").value),exit=Number($("exit").value),balance=Number($("balance").value),
+        target=Number($("targetRisk").value);
 
-  const side = $("side").value;
-
-  const lot =
-    Number($("lot").value);
-
-  const entry =
-    Number($("entry").value);
-
-  const sl =
-    Number($("sl").value);
-
-  const tp =
-    Number($("tp").value);
-
-  const exit =
-    Number($("exit").value);
-
-  const balance =
-    Number($("balance").value);
-
-
-  if(
-    !lot ||
-    !entry ||
-    !sl ||
-    !tp ||
-    !exit ||
-    !balance
-  ){
-
-    alert(
-      "Lengkapi Balance, Lot, Entry, SL, TP dan Exit."
-    );
-
-    return;
+  if(!lot||!entry||!sl||!tp||!exit||!balance){
+    alert("Lengkapi Balance, Lot, Entry, SL, TP dan Exit.");return;
   }
+  const riskMove=Math.abs(entry-sl),rewardMove=Math.abs(tp-entry);
+  if(riskMove===0){alert("SL tidak boleh sama dengan Entry.");return;}
 
-
-  const riskMove =
-    Math.abs(entry-sl);
-
-  const rewardMove =
-    Math.abs(tp-entry);
-
-
-  if(riskMove===0){
-
-    alert(
-      "SL tidak boleh sama dengan Entry."
-    );
-
-    return;
-  }
-
-
-  const rr =
-    rewardMove/riskMove;
-
-
-  const riskUSC =
-    riskMove*lot*10000;
-
-
-  const riskPct =
-    riskUSC/balance*100;
-
-
-  let pnlUSD;
-
-
-  if(side==="BUY"){
-
-    pnlUSD =
-      (exit-entry)*lot*100;
-
-  }else{
-
-    pnlUSD =
-      (entry-exit)*lot*100;
-
-  }
-
-
-  const pnlUSC =
-    pnlUSD*100;
-
-
+  const rr=rewardMove/riskMove;
+  const riskUSC=riskMove*lot*USC_PER_LOT_PER_PRICE;
+  const riskPct=riskUSC/balance*100;
+  const pnlUSC=(side==="BUY"?(exit-entry):(entry-exit))*lot*USC_PER_LOT_PER_PRICE;
   const violations=[];
 
-
-  if(riskPct>2){
-    violations.push("Risk > 2%");
-  }
-
-
-  if(rr<2){
-    violations.push("RR < 1:2");
-  }
-
-
-  if($("poi").value==="NO"){
-    violations.push("Tidak ada POI");
-  }
-
-
-  if($("mss").value==="NO"){
-    violations.push("Tidak ada MSS/BOS");
-  }
-
-
-  if($("fomo").value==="YES"){
-    violations.push("FOMO");
-  }
-
-
-  if($("revenge").value==="YES"){
-    violations.push("Revenge Trade");
-  }
-
+  if(riskPct>2)violations.push("Risk > 2%");
+  if(rr<2)violations.push("RR < 1:2");
+  if($("poi").value==="NO")violations.push("Tidak ada POI");
+  if($("mss").value==="NO")violations.push("Tidak ada MSS/BOS");
+  if($("fomo").value==="YES")violations.push("FOMO");
+  if($("revenge").value==="YES")violations.push("Revenge Trade");
 
   const trade={
-
-    date:$("date").value,
-
-    side:side,
-
-    lot:lot,
-
-    entry:entry,
-
-    sl:sl,
-
-    tp:tp,
-
-    exit:exit,
-
-    balance:balance,
-
-    rr:rr,
-
-    riskUSC:riskUSC,
-
-    riskPct:riskPct,
-
-    pnlUSC:pnlUSC,
-
-    result:$("result").value,
-
-    session:$("session").value,
-
-    poi:$("poi").value,
-
-    mss:$("mss").value,
-
-    fomo:$("fomo").value,
-
-    revenge:$("revenge").value,
-
-    violations:violations,
-
-    note:$("note").value
-
+    date:$("date").value,side,lot,entry,sl,tp,exit,balance,targetRisk:target,rr,
+    riskUSC,riskPct,pnlUSC,result:$("result").value,session:$("session").value,
+    poi:$("poi").value,mss:$("mss").value,fomo:$("fomo").value,revenge:$("revenge").value,
+    violations,note:$("note").value
   };
 
-
   trades.push(trade);
-
-
-  try{
-
-    localStorage.setItem(
-      "xauTrades",
-      JSON.stringify(trades)
-    );
-
-  }catch(error){
-
-    alert(
-      "Trade dihitung tetapi gagal disimpan di browser."
-    );
-
-    return;
-  }
-
-
+  try{localStorage.setItem("xauTrades",JSON.stringify(trades))}catch(e){alert("Gagal menyimpan data di browser.");return}
   render();
-
-
-  if(violations.length){
-
-    alert(
-      "✅ Trade berhasil disimpan!\n\n"+
-      "⚠️ Pelanggaran:\n"+
-      violations.join("\n")
-    );
-
-  }else{
-
-    alert(
-      "✅ Trade berhasil disimpan!\n\n"+
-      "Sesuai plan."
-    );
-
-  }
-
-
+  alert(violations.length?"✅ Trade berhasil disimpan!\n\n⚠️ "+violations.join("\n"):"✅ Trade berhasil disimpan!\n\nSesuai plan.");
   $("note").value="";
-
 }
-
 
 function render(){
-
-  const total =
-    trades.length;
-
-
-  const wins =
-    trades.filter(function(t){
-      return t.result==="WIN";
-    }).length;
-
-
-  const net =
-    trades.reduce(function(sum,t){
-      return sum+
-        Number(t.pnlUSC||0);
-    },0);
-
-
-  const avgRR =
-    total
-    ?
-    trades.reduce(function(sum,t){
-      return sum+
-        Number(t.rr||0);
-    },0)/total
-    :
-    0;
-
-
-  const compliant =
-    total
-    ?
-    trades.filter(function(t){
-      return !t.violations ||
-        t.violations.length===0;
-    }).length/total*100
-    :
-    0;
-
-
-  const grossWin =
-    trades
-    .filter(function(t){
-      return Number(t.pnlUSC)>0;
-    })
-    .reduce(function(sum,t){
-      return sum+
-        Number(t.pnlUSC);
-    },0);
-
-
-  const grossLoss =
-    Math.abs(
-      trades
-      .filter(function(t){
-        return Number(t.pnlUSC)<0;
-      })
-      .reduce(function(sum,t){
-        return sum+
-          Number(t.pnlUSC);
-      },0)
-    );
-
-
-  const pf =
-    grossLoss
-    ?
-    grossWin/grossLoss
-    :
-    0;
-
-
-  $("total").textContent =
-    total;
-
-
-  $("winrate").textContent =
-    (total ? wins/total*100 : 0)
-    .toFixed(1)+"%";
-
-
-  $("pnl").textContent =
-    net.toFixed(0)+" USC";
-
-
-  $("rr").textContent =
-    avgRR.toFixed(2);
-
-
-  $("plan").textContent =
-    compliant.toFixed(1)+"%";
-
-
-  $("pf").textContent =
-    pf.toFixed(2);
-
+  const total=trades.length;
+  const wins=trades.filter(t=>t.result==="WIN").length;
+  const net=trades.reduce((s,t)=>s+Number(t.pnlUSC||0),0);
+  const avgRR=total?trades.reduce((s,t)=>s+Number(t.rr||0),0)/total:0;
+  const compliant=total?trades.filter(t=>!t.violations||t.violations.length===0).length/total*100:0;
+  const grossWin=trades.filter(t=>Number(t.pnlUSC)>0).reduce((s,t)=>s+Number(t.pnlUSC),0);
+  const grossLoss=Math.abs(trades.filter(t=>Number(t.pnlUSC)<0).reduce((s,t)=>s+Number(t.pnlUSC),0));
+  const pf=grossLoss?grossWin/grossLoss:0;
+  $("total").textContent=total;
+  $("winrate").textContent=(total?wins/total*100:0).toFixed(1)+"%";
+  $("pnl").textContent=net.toFixed(2)+" USC";
+  $("rr").textContent=avgRR.toFixed(2);
+  $("plan").textContent=compliant.toFixed(1)+"%";
+  $("pf").textContent=pf.toFixed(2);
 
   if(!total){
-
-    $("history").innerHTML =
-      '<div class="small">'+
-      'Belum ada trade.</div>';
-
-    $("evaluation").innerHTML =
-      "Belum ada data untuk dievaluasi.";
-
-    return;
+    $("history").innerHTML='<div class="small">Belum ada trade.</div>';
+    $("evaluation").innerHTML="Belum ada data untuk dievaluasi.";return;
   }
 
-
-  $("history").innerHTML =
-    trades.slice().reverse().map(function(t){
-
-      const pnl =
-        Number(t.pnlUSC||0);
-
-      const color =
-        pnl>=0 ? "good" : "bad";
-
-
-      const violations =
-        Array.isArray(t.violations)
-        ?
-        t.violations
-        :
-        [];
-
-
-      const status =
-        violations.length
-        ?
-        "❌ "+violations.join(", ")
-        :
-        "✅ SESUAI PLAN";
-
-
-      return `
-      <div class="trade">
-
-      <b>
-      ${t.date} •
-      ${t.side} •
-      ${t.session}
-      </b>
-
-      <br>
-
-      <span class="${color}">
-      P/L:
-      ${pnl.toFixed(0)}
-      USC
-      </span>
-
-      <br>
-
-      <span class="small">
-
-      Lot ${t.lot} •
-      Entry ${t.entry} •
-      Exit ${t.exit}
-
-      <br>
-
-      Risk
-      ${Number(t.riskPct||0).toFixed(2)}%
-      •
-      RR
-      1:${Number(t.rr||0).toFixed(2)}
-
-      </span>
-
-      <br>
-
+  $("history").innerHTML=trades.slice().reverse().map(t=>{
+    const pnl=Number(t.pnlUSC||0),color=pnl>=0?"good":"bad";
+    const violations=Array.isArray(t.violations)?t.violations:[];
+    const status=violations.length?"❌ "+violations.join(", "):"✅ SESUAI PLAN";
+    return `<div class="trade">
+      <b>${t.date} • ${t.side} • ${t.session}</b><br>
+      <span class="${color}">P/L: ${pnl.toFixed(2)} USC</span><br>
+      <span class="small">Lot ${t.lot} • Entry ${t.entry} • Exit ${t.exit}<br>
+      Risk ${Number(t.riskPct||0).toFixed(2)}% • RR 1:${Number(t.rr||0).toFixed(2)}</span><br>
       <b>${status}</b>
+      ${t.note?"<br><span class='small'>"+t.note+"</span>":""}
+    </div>`;
+  }).join("");
 
-      ${
-        t.note
-        ?
-        "<br><span class='small'>"+
-        t.note+
-        "</span>"
-        :
-        ""
-      }
-
-      </div>
-      `;
-
-    }).join("");
-
-
-  const bad =
-    trades.filter(function(t){
-
-      return Array.isArray(t.violations)
-        &&
-        t.violations.length>0;
-
-    }).length;
-
-
-  $("evaluation").innerHTML =
-    "Total trade: <b>"+
-    total+
-    "</b><br>"+
-
-    "Trade sesuai plan: "+
-    "<b class='good'>"+
-    (total-bad)+
-    "</b><br>"+
-
-    "Trade melanggar plan: "+
-    "<b class='bad'>"+
-    bad+
-    "</b>";
-
+  const bad=trades.filter(t=>Array.isArray(t.violations)&&t.violations.length>0).length;
+  $("evaluation").innerHTML="Total trade: <b>"+total+"</b><br>"+
+    "Trade sesuai plan: <b class='good'>"+(total-bad)+"</b><br>"+
+    "Trade melanggar plan: <b class='bad'>"+bad+"</b>";
 }
 
-
-$("saveButton")
-.addEventListener(
-  "click",
-  saveTrade
-);
-
-
-$("backupButton")
-.addEventListener(
-  "click",
-  function(){
-
-    const blob =
-      new Blob(
-        [JSON.stringify(trades,null,2)],
-        {type:"application/json"}
-      );
-
-
-    const url =
-      URL.createObjectURL(blob);
-
-
-    const a =
-      document.createElement("a");
-
-
-    a.href=url;
-
-    a.download=
-      "XAU-Journal-Backup.json";
-
-
-    document.body.appendChild(a);
-
-    a.click();
-
-    a.remove();
-
-    URL.revokeObjectURL(url);
-
-  }
-);
-
-
-$("clearButton")
-.addEventListener(
-  "click",
-  function(){
-
-    if(
-      confirm(
-        "Hapus semua riwayat trade?"
-      )
-    ){
-
-      trades=[];
-
-      localStorage.removeItem(
-        "xauTrades"
-      );
-
-      render();
-
-    }
-
-  }
-);
-
-
-render();
-
+$("saveButton").addEventListener("click",saveTrade);
+$("backupButton").addEventListener("click",()=>{
+  const blob=new Blob([JSON.stringify(trades,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download="XAU-Journal-Backup.json";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+});
+$("clearButton").addEventListener("click",()=>{
+  if(confirm("Hapus semua riwayat trade?")){trades=[];localStorage.removeItem("xauTrades");render();}
+});
+render();calculate();
 })();
 </script>
-
 </body>
-</html>
+  </html>
