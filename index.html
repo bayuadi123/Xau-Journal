@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#111827">
-<title>XAU Journal V3</title>
+<title>XAU Journal V4</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#0b1120;color:#fff;font-family:Arial,sans-serif}
@@ -24,7 +24,7 @@ button{width:100%;padding:13px;border:0;border-radius:9px;background:#2563eb;col
 </style>
 </head>
 <body>
-<header><h1>🥇 XAU Journal</h1><div class="small">XAUUSD • Cent Account • V3</div></header>
+<header><h1>🥇 XAU Journal</h1><div class="small">XAUUSD • Cent Account • V4</div></header>
 <main>
 <div class="card">
 <h2>📊 Dashboard</h2>
@@ -35,14 +35,25 @@ button{width:100%;padding:13px;border:0;border-radius:9px;background:#2563eb;col
 <div class="stat">Avg RR<b id="rr">0</b></div>
 <div class="stat">Sesuai Plan<b id="plan">0%</b></div>
 <div class="stat">Profit Factor<b id="pf">0</b></div>
+<div class="stat">Current Balance<b id="dashboardBalance">0 USC</b></div>
 </div>
+</div>
+
+<div class="card">
+<h2>💰 Balance Akun</h2>
+<div class="grid">
+<div><label>Starting Balance (USC)</label><input id="startingBalance" type="number" step="0.01" placeholder="711"></div>
+<div><label>Current Balance (USC)</label><input id="currentBalance" type="text" readonly></div>
+</div>
+<button id="setBalanceButton" type="button">💾 SET / RESET BALANCE</button>
+<div class="notice">Starting Balance hanya diatur saat pertama kali mulai jurnal, atau saat ada deposit/withdrawal. Setelah trade disimpan, Current Balance otomatis bertambah/berkurang sesuai P/L.</div>
 </div>
 
 <div class="card">
 <h2>➕ Tambah Trade</h2>
 <div class="grid">
 <div><label>Tanggal</label><input id="date" type="date"></div>
-<div><label>Balance saat entry (USC)</label><input id="balance" type="number" step="0.01" placeholder="711"></div>
+<div><label>Balance saat entry (USC)</label><input id="balance" type="text" readonly></div>
 
 <div><label>Target Risk %</label><input id="targetRisk" type="number" step="0.1" value="1"></div>
 <div><label>Lot</label><input id="lot" type="number" step="0.01" value="0.01"></div>
@@ -87,7 +98,35 @@ Untuk XAU pada akun Cent yang diuji dari MT5 kamu: P/L aktual 0.05 lot dengan pe
 const $=id=>document.getElementById(id);
 let trades=[];
 try{trades=JSON.parse(localStorage.getItem("xauTrades")||"[]");if(!Array.isArray(trades))trades=[]}catch(e){trades=[]}
+
+let account={startingBalance:0,currentBalance:0};
+try{
+  account=JSON.parse(localStorage.getItem("xauAccount")||"null")||account;
+  account.startingBalance=Number(account.startingBalance)||0;
+  account.currentBalance=Number(account.currentBalance)||0;
+}catch(e){account={startingBalance:0,currentBalance:0}}
+
 $("date").value=new Date().toISOString().slice(0,10);
+
+function updateBalanceUI(){
+  $("startingBalance").value=account.startingBalance?account.startingBalance.toFixed(2):"";
+  $("currentBalance").value=account.currentBalance?account.currentBalance.toFixed(2):"0.00";
+  $("balance").value=account.currentBalance?account.currentBalance.toFixed(2):"";
+}
+
+function saveAccount(){
+  const starting=Number($("startingBalance").value);
+  if(!starting || starting<=0){
+    alert("Masukkan Starting Balance yang benar, contoh 711 USC.");
+    return;
+  }
+  account.startingBalance=starting;
+  account.currentBalance=starting;
+  localStorage.setItem("xauAccount",JSON.stringify(account));
+  updateBalanceUI();
+  calculate();
+  alert("✅ Balance berhasil diatur ke "+starting.toFixed(2)+" USC.");
+}
 
 /* MT5 Cent calibration from user's real trade:
    0.05 lot, 4.13 price distance => 20.65 USC
@@ -109,7 +148,7 @@ function getValues(){
 function calculate(){
   const v=getValues();
   if(!v.lot||!v.entry||!v.sl||!v.tp||!v.balance){
-    $("calc").innerHTML="Masukkan Balance, Lot, Entry, SL dan TP.";
+    $("calc").innerHTML="Atur Starting Balance terlebih dahulu, lalu isi Lot, Entry, SL dan TP.";
     $("recommend").innerHTML="Rekomendasi lot akan muncul di sini.";
     return;
   }
@@ -173,9 +212,19 @@ function saveTrade(){
   };
 
   trades.push(trade);
-  try{localStorage.setItem("xauTrades",JSON.stringify(trades))}catch(e){alert("Gagal menyimpan data di browser.");return}
+  account.currentBalance += pnlUSC;
+  try{
+    localStorage.setItem("xauTrades",JSON.stringify(trades));
+    localStorage.setItem("xauAccount",JSON.stringify(account));
+  }catch(e){
+    alert("Gagal menyimpan data di browser.");
+    return;
+  }
+  updateBalanceUI();
   render();
-  alert(violations.length?"✅ Trade berhasil disimpan!\n\n⚠️ "+violations.join("\n"):"✅ Trade berhasil disimpan!\n\nSesuai plan.");
+  calculate();
+  const balanceMsg="\n\nBalance baru: "+account.currentBalance.toFixed(2)+" USC";
+  alert((violations.length?"✅ Trade berhasil disimpan!\n\n⚠️ "+violations.join("\n"):"✅ Trade berhasil disimpan!\n\nSesuai plan.")+balanceMsg);
   $("note").value="";
 }
 
@@ -194,6 +243,7 @@ function render(){
   $("rr").textContent=avgRR.toFixed(2);
   $("plan").textContent=compliant.toFixed(1)+"%";
   $("pf").textContent=pf.toFixed(2);
+  $("dashboardBalance").textContent=(account.currentBalance||0).toFixed(2)+" USC";
 
   if(!total){
     $("history").innerHTML='<div class="small">Belum ada trade.</div>';
@@ -220,17 +270,18 @@ function render(){
     "Trade melanggar plan: <b class='bad'>"+bad+"</b>";
 }
 
+$("setBalanceButton").addEventListener("click",saveAccount);
 $("saveButton").addEventListener("click",saveTrade);
 $("backupButton").addEventListener("click",()=>{
-  const blob=new Blob([JSON.stringify(trades,null,2)],{type:"application/json"});
+  const blob=new Blob([JSON.stringify({account,trades},null,2)],{type:"application/json"});
   const url=URL.createObjectURL(blob),a=document.createElement("a");
   a.href=url;a.download="XAU-Journal-Backup.json";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
 });
 $("clearButton").addEventListener("click",()=>{
-  if(confirm("Hapus semua riwayat trade?")){trades=[];localStorage.removeItem("xauTrades");render();}
+  if(confirm("Hapus semua riwayat trade DAN balance akun?")){trades=[];account={startingBalance:0,currentBalance:0};localStorage.removeItem("xauTrades");localStorage.removeItem("xauAccount");updateBalanceUI();updateBalanceUI();render();calculate();}
 });
 render();calculate();
 })();
 </script>
 </body>
-  </html>
+</html>
